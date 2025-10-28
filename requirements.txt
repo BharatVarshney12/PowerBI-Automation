@@ -1,0 +1,9 @@
+playwright
+pytest
+pytest-playwright
+allure-pytest
+pandas
+openpyxl
+sweetviz
+ydata-profiling
+snowflake-connector-python
