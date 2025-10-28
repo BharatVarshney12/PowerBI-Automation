@@ -4,7 +4,6 @@ Manages Snowflake database connections and queries
 """
 
 import snowflake.connector
-from snowflake.connector import DictCursor
 import pandas as pd
 from config.snowflake_config import SNOWFLAKE_CONFIG
 import allure
@@ -30,10 +29,15 @@ class SnowflakeConnector:
                     warehouse=SNOWFLAKE_CONFIG['warehouse'],
                     database=SNOWFLAKE_CONFIG['database'],
                     schema=SNOWFLAKE_CONFIG['schema'],
-                    role=SNOWFLAKE_CONFIG.get('role', 'ACCOUNTADMIN')
+                    role=SNOWFLAKE_CONFIG.get('role', 'ACCOUNTADMIN'),
+                    # Disable result caching and JSON parsing issues
+                    session_parameters={
+                        'QUERY_TAG': 'PowerBI_Automation',
+                    }
                 )
                 
-                self.cursor = self.connection.cursor(DictCursor)
+                # Don't use DictCursor to avoid JSON parsing issues
+                self.cursor = self.connection.cursor()
                 
                 print(f"[SNOWFLAKE] ✅ Connected successfully")
                 print(f"[SNOWFLAKE] Database: {SNOWFLAKE_CONFIG['database']}")
@@ -61,12 +65,27 @@ class SnowflakeConnector:
             try:
                 print(f"[SNOWFLAKE] Executing query...")
                 
-                self.cursor.execute(query)
-                results = self.cursor.fetchall()
+                # Use default cursor instead of DictCursor to avoid JSON parsing issues
+                cursor = self.connection.cursor()
+                cursor.execute(query)
                 
-                # Convert to DataFrame
+                # Get column names
+                columns = [desc[0] for desc in cursor.description] if cursor.description else []
+                
+                # Fetch all results
+                results = cursor.fetchall()
+                cursor.close()
+                
+                # Convert to DataFrame with explicit column names
                 if results:
-                    df = pd.DataFrame(results)
+                    df = pd.DataFrame(results, columns=columns)
+                    
+                    # Clean up any problematic data types
+                    for col in df.columns:
+                        # Convert bytes to string if needed
+                        if df[col].dtype == 'object':
+                            df[col] = df[col].apply(lambda x: str(x) if isinstance(x, bytes) else x)
+                    
                     print(f"[SNOWFLAKE] ✅ Query returned {len(df)} rows")
                     
                     allure.attach(
