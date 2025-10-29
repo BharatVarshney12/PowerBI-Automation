@@ -1,4 +1,0 @@
-Account: po54025.central-india.azure
-Database: SNOWFLAKELEARNING
-Schema: TRAINING_SCHEMA
-Warehouse: COMPUTE_WH

@@ -32,11 +32,12 @@ BROWSER_CONFIG = {
     'browser_type': 'chromium',
     'args': [
         '--disable-blink-features=AutomationControlled',
-        '--incognito'
+        '--start-maximized'  # Open browser in maximized mode
     ],
-    'viewport': {'width': 1920, 'height': 1080},
+    'viewport': None,  # Use full screen instead of fixed viewport
     'accept_downloads': True,
-    'ignore_https_errors': True
+    'ignore_https_errors': True,
+    'persist_session': False  # Always force fresh login (disabled session persistence)
 }
 
 # Timeout Configuration (in milliseconds)

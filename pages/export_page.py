@@ -24,32 +24,24 @@ class ExportPage(BasePage):
         self.grid_text = SELECTORS['dashboard']['grid_text']
     
     def select_visual_grid(self):
-        """Select the visual grid for export"""
+        """Select the visual grid for export - click on white space"""
         with allure.step('Select Visual Grid'):
             print("\n[EXPORT] Starting report export process...")
             
             try:
-                # Try to find specific grid with text
-                grid_selector = self.get_by_role(self.grid_role).filter(has_text=self.grid_text)
+                # Click on the interactive grid white space
+                grid_selector = self.page.locator('div.interactive-grid.innerContainer')
                 
                 if grid_selector.count() > 0:
-                    grid_selector.click()
-                    print("[EXPORT] Clicked on grid visual (first click)")
-                    self.wait(1000)
-                    
-                    grid_selector.click()
-                    print("[EXPORT] Clicked grid visual again (second click)")
-                    self.wait(1500)
+                    grid_selector.first.click()
+                    print("[EXPORT] Clicked on grid visual (white space)")
+                    self.wait(800)
                     
                     self.attach_text('Grid visual selected successfully', 'Visual Selection')
                     self.take_screenshot('Visual Selected')
                 else:
-                    # Fallback to first available grid
-                    self.get_by_role(self.grid_role).first.click()
-                    self.wait(1000)
-                    self.get_by_role(self.grid_role).first.click()
-                    self.wait(1500)
-                    self.attach_text('First available grid selected', 'Visual Selection')
+                    self.take_screenshot('Grid Not Found')
+                    raise Exception("Could not find interactive grid")
                     
             except Exception as e:
                 self.take_screenshot('Grid Click Error')
@@ -58,30 +50,34 @@ class ExportPage(BasePage):
             return self
     
     def click_more_options(self):
-        """Click more options button"""
-        with allure.step('Click More Options'):
-            more_options = self.get_by_test_id('visual-more-options-btn')
+        """Click more options button (three dots)"""
+        with allure.step('Click More Options (Three Dots)'):
+            print("[EXPORT] Waiting for 'More options' button (three dots)...")
+            self.wait(1000)
             
-            if more_options.is_visible(timeout=5000):
-                more_options.click()
-                print("[EXPORT] Clicked 'More options' button")
-                self.wait(2000)
+            # Click on three dots icon
+            more_options = self.page.locator('i.glyphicon.pbi-glyph-more.glyph-small')
+            
+            if more_options.count() > 0:
+                more_options.first.click()
+                print("[EXPORT] Clicked 'More options' button (three dots)")
+                self.wait(1000)
                 
                 self.attach_text('More options menu opened', 'Menu Action')
                 self.take_screenshot('More Options Menu')
             else:
                 self.take_screenshot('More Options Not Found')
-                raise Exception("More options button not visible")
+                raise Exception("More options button (three dots) not visible")
             
             return self
     
     def click_export_data(self):
         """Click export data menu item"""
         with allure.step('Click Export Data'):
-            export_data = self.get_by_test_id('pbimenu-item.Export data')
+            export_data = self.page.get_by_text('Export data', exact=True)
             
-            if export_data.is_visible(timeout=5000):
-                export_data.click()
+            if export_data.count() > 0:
+                export_data.first.click()
                 print("[EXPORT] Clicked 'Export data'")
                 self.wait(2000)
                 
@@ -97,22 +93,23 @@ class ExportPage(BasePage):
         """Select export type (Data with current layout)"""
         with allure.step('Select Export Type'):
             try:
-                layout_radio = self.get_by_role(self.export_type_role, name=self.export_type_name)
+                # Click on "Data with current layout" radio button
+                layout_radio = self.page.locator("//label[@for='pbi-radio-button-3-input']//div[@class='pbi-radio-button-circle']")
                 
-                if layout_radio.is_visible(timeout=3000):
-                    layout_radio.click()
-                    print(f"[EXPORT] Selected '{self.export_type_name}'")
-                    self.attach_text(f'Selected: {self.export_type_name}', 'Export Type')
+                if layout_radio.count() > 0:
+                    layout_radio.first.click()
+                    print(f"[EXPORT] Selected 'Data with current layout'")
+                    self.attach_text(f'Selected: Data with current layout', 'Export Type')
                 else:
-                    # Fallback to first radio option
-                    self.page.locator('.exportTypeRadioButtonIcon').first.click()
-                    self.attach_text('Selected: First export type option', 'Export Type')
+                    self.take_screenshot('Radio Button Not Found')
+                    raise Exception("Could not find 'Data with current layout' radio button")
                 
                 self.wait(1000)
                 self.take_screenshot('Export Type Selected')
                 
             except Exception as e:
-                self.attach_text(f'Using default export type: {str(e)}', 'Export Type')
+                self.take_screenshot('Export Type Selection Error')
+                raise Exception(f"Failed to select export type: {str(e)}")
             
             return self
     
@@ -121,21 +118,39 @@ class ExportPage(BasePage):
         with allure.step('Download Report File'):
             os.makedirs(DOWNLOADS_DIR, exist_ok=True)
             
-            export_btn = self.get_by_test_id('export-btn')
+            # Click on Export button
+            export_btn = self.page.get_by_role('button', name='Export')
             
-            if export_btn.is_visible(timeout=5000):
+            if export_btn.count() > 0:
                 print("[EXPORT] Found export button")
                 
                 with self.page.expect_download(timeout=TIMEOUTS['download']) as download_info:
-                    export_btn.click()
+                    export_btn.first.click()
                     print("[EXPORT] Clicked 'Export' button")
                 
                 download = download_info.value
                 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-                filename = download.suggested_filename or f"powerbi_export_{timestamp}.xlsx"
+                
+                # Use unique filename with timestamp to avoid file locks
+                original_filename = download.suggested_filename or "powerbi_export.xlsx"
+                filename = f"powerbi_export_{timestamp}.xlsx"
                 save_path = os.path.join(DOWNLOADS_DIR, filename)
                 
-                download.save_as(save_path)
+                # Try to save, if file is locked, add retry logic
+                max_retries = 3
+                for attempt in range(max_retries):
+                    try:
+                        download.save_as(save_path)
+                        break
+                    except PermissionError:
+                        if attempt < max_retries - 1:
+                            print(f"[WARNING] File locked, retrying... (attempt {attempt + 1}/{max_retries})")
+                            self.wait(1000)
+                            # Try alternative filename
+                            filename = f"powerbi_export_{timestamp}_{attempt + 1}.xlsx"
+                            save_path = os.path.join(DOWNLOADS_DIR, filename)
+                        else:
+                            raise Exception(f"Cannot save file - it may be open in another program. Please close {filename} and try again.")
                 
                 file_size = os.path.getsize(save_path)
                 

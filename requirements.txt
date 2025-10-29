@@ -4,6 +4,7 @@ pytest-playwright
 allure-pytest
 pandas
 openpyxl
+xlsxwriter
 sweetviz
 ydata-profiling
 snowflake-connector-python

@@ -14,9 +14,16 @@ import allure
 
 @pytest.fixture(scope="function")
 def browser_page():
-    """Fixture to provide browser page"""
-    with BrowserManager() as page:
-        yield page
+    """Fixture to provide browser page with session persistence"""
+    manager = BrowserManager()
+    manager.launch_browser()
+    page = manager.create_context()
+    
+    yield page
+    
+    # Save session after test completes (if login was successful)
+    manager.save_session()
+    manager.close()
 
 
 @pytest.fixture(scope="function")

@@ -1,7 +1,0 @@
-Query: 
-            SELECT COUNT(*) as total_rows
-            FROM CUSTOMERS
-            
-
-Rows returned: 1
-Columns: TOTAL_ROWS

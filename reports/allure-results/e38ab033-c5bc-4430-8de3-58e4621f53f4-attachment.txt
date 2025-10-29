@@ -1,2 +1,0 @@
-[32mINFO    [0m snowflake.connector.connection:connection.py:586 Snowflake Connector for Python Version: 4.0.0, Python Version: 3.12.10, Platform: Windows-11-10.0.26100-SP0
-[32mINFO    [0m snowflake.connector.connection:connection.py:1629 Connecting to GLOBAL Snowflake domain
