@@ -1,0 +1,4 @@
+Table: CUSTOMERS
+Row Count: 5
+Column Count: 6
+Columns: CUSTOMER_ID, FIRST_NAME, LAST_NAME, EMAIL, PHONE, CREATED_AT

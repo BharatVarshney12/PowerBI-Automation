@@ -1,0 +1,4 @@
+Query: SELECT COUNT(*) as row_count FROM CUSTOMERS
+
+Rows returned: 1
+Columns: ROW_COUNT

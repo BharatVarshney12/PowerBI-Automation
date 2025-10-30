@@ -1,0 +1,4 @@
+Total Tests: 6
+Passed: 5
+Failed: 1
+Pass Rate: 83.3%

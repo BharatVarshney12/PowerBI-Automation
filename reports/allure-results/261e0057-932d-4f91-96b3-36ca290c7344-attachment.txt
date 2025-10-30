@@ -1,0 +1,17 @@
+[32mINFO    [0m PowerBIAutomation:logger.py:109 ================================================================================
+[32mINFO    [0m PowerBIAutomation:logger.py:110 TEST STARTED: Snowflake Connection Test
+[32mINFO    [0m PowerBIAutomation:logger.py:111 ================================================================================
+[32mINFO    [0m PowerBIAutomation:logger.py:121 STEP: Connect to Snowflake
+[32mINFO    [0m snowflake.connector.connection:connection.py:586 Snowflake Connector for Python Version: 4.0.0, Python Version: 3.12.10, Platform: Windows-11-10.0.26200-SP0
+[32mINFO    [0m snowflake.connector.connection:connection.py:1629 Connecting to GLOBAL Snowflake domain
+[32mINFO    [0m PowerBIAutomation:logger.py:126 ACTION: Fetching table info | CUSTOMERS
+[32mINFO    [0m PowerBIAutomation:logger.py:140 DATA: Table Information
+[32mINFO    [0m PowerBIAutomation:logger.py:142   - Table Name: CUSTOMERS
+[32mINFO    [0m PowerBIAutomation:logger.py:142   - Row Count: 5
+[32mINFO    [0m PowerBIAutomation:logger.py:142   - Column Count: 6
+[32mINFO    [0m PowerBIAutomation:logger.py:136 VERIFY: Table has rows | ✅ PASS
+[32mINFO    [0m PowerBIAutomation:logger.py:136 VERIFY: Table has columns | ✅ PASS
+[32mINFO    [0m PowerBIAutomation:logger.py:146 PERFORMANCE: Total Test | Duration: 7.35s
+[32mINFO    [0m PowerBIAutomation:logger.py:115 ================================================================================
+[32mINFO    [0m PowerBIAutomation:logger.py:116 TEST PASSED: Snowflake Connection Test
+[32mINFO    [0m PowerBIAutomation:logger.py:117 ================================================================================

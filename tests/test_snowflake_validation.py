@@ -175,7 +175,8 @@ class TestSnowflakeValidation:
             from config.config import DOWNLOADS_DIR
             
             log_step("Find most recent PowerBI export")
-            excel_files = list(DOWNLOADS_DIR.glob('*.xlsx'))
+            # Get all Excel files, excluding temporary lock files (~$)
+            excel_files = [f for f in DOWNLOADS_DIR.glob('*.xlsx') if not f.name.startswith('~$')]
             if not excel_files:
                 log_action("No Excel files found", "Skipping test")
                 pytest.skip("No Excel files found in downloads directory")

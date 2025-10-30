@@ -1,0 +1,10 @@
+Query: 
+                SELECT COLUMN_NAME, DATA_TYPE, IS_NULLABLE
+                FROM INFORMATION_SCHEMA.COLUMNS
+                WHERE TABLE_SCHEMA = 'TRAINING_SCHEMA'
+                AND TABLE_NAME = 'CUSTOMERS'
+                ORDER BY ORDINAL_POSITION
+                
+
+Rows returned: 6
+Columns: COLUMN_NAME, DATA_TYPE, IS_NULLABLE

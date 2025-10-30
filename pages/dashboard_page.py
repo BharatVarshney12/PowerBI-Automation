@@ -20,16 +20,16 @@ class DashboardPage(BasePage):
         """Wait for PowerBI dashboard to load"""
         with allure.step('Wait for PowerBI Dashboard to Load'):
             print("[INFO] Waiting for PowerBI dashboard to load...")
-            self.wait(8000)  # Increased to 8s to handle prompts
+            self.wait(8000)  # Keep 8s to handle prompts
             
             # Check multiple times for redirect to PowerBI
-            max_attempts = 10  # Increased back to 10
+            max_attempts = 10
             for i in range(max_attempts):
                 dashboard_url = self.get_current_url()
                 if "app.powerbi.com/groups" in dashboard_url:
                     break
                 print(f"[INFO] Waiting for PowerBI... ({i+1}/{max_attempts})")
-                self.wait(2000)  # Increased back to 2s
+                self.wait(2000)
             
             dashboard_url = self.get_current_url()
             print(f"[INFO] Current URL: {dashboard_url}")
@@ -42,7 +42,7 @@ class DashboardPage(BasePage):
                 raise Exception(f"Did not reach PowerBI dashboard. Current URL: {dashboard_url}")
             
             try:
-                self.wait_for_load_state("networkidle", timeout=TIMEOUTS['navigation'])
+                self.wait_for_load_state("networkidle", timeout=30000)  # Reduced from 60s to 30s
                 self.attach_text('Dashboard fully loaded', 'Dashboard Status')
             except:
                 self.attach_text('Dashboard loaded with some pending requests', 'Dashboard Status')

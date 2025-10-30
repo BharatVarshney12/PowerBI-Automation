@@ -1,0 +1,4 @@
+Tolerance: 1.0%
+Columns Compared: 0
+All Within Tolerance: True
+

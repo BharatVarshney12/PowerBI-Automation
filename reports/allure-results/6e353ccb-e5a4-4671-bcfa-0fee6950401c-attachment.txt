@@ -1,0 +1,4 @@
+PowerBI Rows: 5
+Snowflake Rows: 5
+Match: True
+Difference: 0
