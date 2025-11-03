@@ -2,10 +2,10 @@
 [32mINFO    [0m PowerBIAutomation:logger.py:110 TEST STARTED: Validate Existing Files
 [32mINFO    [0m PowerBIAutomation:logger.py:111 ================================================================================
 [32mINFO    [0m PowerBIAutomation:logger.py:121 STEP: Find most recent PowerBI export
-[32mINFO    [0m PowerBIAutomation:logger.py:126 ACTION: Using PowerBI file | powerbi_export_20251030_132106.xlsx
+[32mINFO    [0m PowerBIAutomation:logger.py:126 ACTION: Using PowerBI file | powerbi_export_20251103_135810.xlsx
 [32mINFO    [0m PowerBIAutomation:logger.py:121 STEP: Load PowerBI Data
 [32mINFO    [0m PowerBIAutomation:logger.py:140 DATA: PowerBI Data
-[32mINFO    [0m PowerBIAutomation:logger.py:142   - File: powerbi_export_20251030_132106.xlsx
+[32mINFO    [0m PowerBIAutomation:logger.py:142   - File: powerbi_export_20251103_135810.xlsx
 [32mINFO    [0m PowerBIAutomation:logger.py:142   - Rows: 5
 [32mINFO    [0m PowerBIAutomation:logger.py:142   - Columns: 10
 [32mINFO    [0m PowerBIAutomation:logger.py:121 STEP: Fetch Snowflake Data
@@ -21,7 +21,7 @@
 [32mINFO    [0m PowerBIAutomation:logger.py:142   - Tests Passed: 5
 [32mINFO    [0m PowerBIAutomation:logger.py:142   - Tests Failed: 1
 [32mINFO    [0m PowerBIAutomation:logger.py:134 VERIFY: Data Validation | ✅ PASS | 83.3% pass rate
-[32mINFO    [0m PowerBIAutomation:logger.py:146 PERFORMANCE: Total Test | Duration: 3.98s
+[32mINFO    [0m PowerBIAutomation:logger.py:146 PERFORMANCE: Total Test | Duration: 5.27s
 [32mINFO    [0m PowerBIAutomation:logger.py:115 ================================================================================
 [32mINFO    [0m PowerBIAutomation:logger.py:116 TEST PASSED: Validate Existing Files
 [32mINFO    [0m PowerBIAutomation:logger.py:117 ================================================================================

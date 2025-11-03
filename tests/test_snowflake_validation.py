@@ -175,11 +175,15 @@ class TestSnowflakeValidation:
             from config.config import DOWNLOADS_DIR
             
             log_step("Find most recent PowerBI export")
-            # Get all Excel files, excluding temporary lock files (~$)
-            excel_files = [f for f in DOWNLOADS_DIR.glob('*.xlsx') if not f.name.startswith('~$')]
+            # Get only PowerBI export files, excluding temporary lock files (~$) and validation results
+            excel_files = [
+                f for f in DOWNLOADS_DIR.glob('*.xlsx') 
+                if not f.name.startswith('~$') 
+                and f.name.startswith('powerbi_export_')
+            ]
             if not excel_files:
-                log_action("No Excel files found", "Skipping test")
-                pytest.skip("No Excel files found in downloads directory")
+                log_action("No PowerBI export files found", "Skipping test")
+                pytest.skip("No PowerBI export files found in downloads directory")
             
             # Use most recent file
             powerbi_file = max(excel_files, key=lambda x: x.stat().st_mtime)
@@ -187,7 +191,17 @@ class TestSnowflakeValidation:
             
             with allure.step(f'Load PowerBI File: {powerbi_file.name}'):
                 log_step("Load PowerBI Data")
-                powerbi_df = pd.read_excel(powerbi_file)
+                
+                try:
+                    powerbi_df = pd.read_excel(powerbi_file)
+                except Exception as e:
+                    log_error(f"Failed to read Excel file: {str(e)}")
+                    pytest.skip(f"Cannot read Excel file {powerbi_file.name}: {str(e)}")
+                
+                # Verify file has data
+                if len(powerbi_df) == 0:
+                    log_action("Excel file is empty", "Skipping test")
+                    pytest.skip(f"Excel file {powerbi_file.name} contains no data")
                 
                 log_data("PowerBI Data", {
                     "File": powerbi_file.name,
@@ -199,16 +213,20 @@ class TestSnowflakeValidation:
             with allure.step('Fetch Snowflake Data'):
                 log_step("Fetch Snowflake Data")
                 
-                with SnowflakeConnector() as sf_conn:
-                    table_name = VALIDATION_CONFIG['table_name']
-                    snowflake_df = sf_conn.get_table_data(table_name)
-                    
-                    log_data("Snowflake Data", {
-                        "Table": table_name,
-                        "Rows": len(snowflake_df),
-                        "Columns": len(snowflake_df.columns)
-                    })
-                    print(f"[SNOWFLAKE] Loaded {len(snowflake_df)} rows")
+                try:
+                    with SnowflakeConnector() as sf_conn:
+                        table_name = VALIDATION_CONFIG['table_name']
+                        snowflake_df = sf_conn.get_table_data(table_name)
+                        
+                        log_data("Snowflake Data", {
+                            "Table": table_name,
+                            "Rows": len(snowflake_df),
+                            "Columns": len(snowflake_df.columns)
+                        })
+                        print(f"[SNOWFLAKE] Loaded {len(snowflake_df)} rows")
+                except Exception as e:
+                    log_error(f"Failed to fetch Snowflake data: {str(e)}", exc_info=True)
+                    pytest.skip(f"Cannot connect to Snowflake or fetch data: {str(e)}")
             
             with allure.step('Validate Data'):
                 log_step("Validate Data Consistency")

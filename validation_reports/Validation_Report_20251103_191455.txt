@@ -1,0 +1,158 @@
+========================================================================================================================
+EXCEL vs SNOWFLAKE COMPREHENSIVE VALIDATION REPORT
+Generated: 2025-11-03 19:14:55
+Database: POWERBI_LEARNING.TRAINING_POWERBI
+========================================================================================================================
+
+
+========================================================================================================================
+TABLE: SPEND_BY_CODE
+Overall Status: FAILED
+========================================================================================================================
+
+1. ROW COUNT CHECK: ❌ FAIL
+   Excel Rows: 5
+   Snowflake Rows: 3
+   Match: False
+   Difference: -2
+
+2. COLUMN COUNT CHECK: ✅ PASS
+   Excel Columns: 10
+   Snowflake Columns: 10
+   Match: True
+   Difference: 0
+
+3. COLUMN MAPPING CHECK: ✅ PASS
+   Mapped Columns: 10
+
+4. NULL VALUE CHECK:
+   Columns Checked: 10
+   Columns with NULL Mismatches: 10
+      - Claim Form Type: Excel=1, Snowflake=0, Diff=-1
+      - PMPM Prev Year: Excel=2, Snowflake=0, Diff=-2
+      - PMPM: Excel=2, Snowflake=0, Diff=-2
+      - PMPM YoY%: Excel=2, Snowflake=0, Diff=-2
+      - Total Paid Prev Year: Excel=2, Snowflake=0, Diff=-2
+      - Total Paid: Excel=2, Snowflake=0, Diff=-2
+      - Total Paid YoY%: Excel=2, Snowflake=0, Diff=-2
+      - Cost Per Claim Prev Year: Excel=2, Snowflake=0, Diff=-2
+      - Cost Per Claim: Excel=2, Snowflake=0, Diff=-2
+      - Cost Per Claim YoY%: Excel=2, Snowflake=0, Diff=-2
+
+5. DATA VALIDATION CHECK: ✅ PASS
+   Sample Size: 3 rows
+   Mismatches Found: 0
+
+SUMMARY:
+   Total Checks: 6
+   Passed: 4
+   Warnings: 10
+   Failures: 1
+
+
+========================================================================================================================
+TABLE: SPEND_BY_PRODUCT_TYPE
+Overall Status: FAILED
+========================================================================================================================
+
+1. ROW COUNT CHECK: ❌ FAIL
+   Excel Rows: 9
+   Snowflake Rows: 7
+   Match: False
+   Difference: -2
+
+2. COLUMN COUNT CHECK: ✅ PASS
+   Excel Columns: 11
+   Snowflake Columns: 11
+   Match: True
+   Difference: 0
+
+3. COLUMN MAPPING CHECK: ✅ PASS
+   Mapped Columns: 11
+
+4. NULL VALUE CHECK:
+   Columns Checked: 11
+   Columns with NULL Mismatches: 11
+      - Claim Form Type: Excel=1, Snowflake=0, Diff=-1
+      - Product: Excel=3, Snowflake=1, Diff=-2
+      - PMPM Prev Year: Excel=2, Snowflake=0, Diff=-2
+      - PMPM: Excel=2, Snowflake=0, Diff=-2
+      - PMPM YoY%: Excel=2, Snowflake=0, Diff=-2
+      - Total Paid Prev Year: Excel=2, Snowflake=0, Diff=-2
+      - Total Paid: Excel=2, Snowflake=0, Diff=-2
+      - Total Paid YoY%: Excel=2, Snowflake=0, Diff=-2
+      - Cost Per Claim Prev year: Excel=2, Snowflake=0, Diff=-2
+      - Cost Per Claim: Excel=2, Snowflake=0, Diff=-2
+      - Cost Per Claim YoY%: Excel=2, Snowflake=0, Diff=-2
+
+5. DATA VALIDATION CHECK: ✅ PASS
+   Sample Size: 7 rows
+   Mismatches Found: 0
+
+SUMMARY:
+   Total Checks: 6
+   Passed: 4
+   Warnings: 11
+   Failures: 1
+
+
+========================================================================================================================
+TABLE: SPEND_BY_BILL_TYPE
+Overall Status: FAILED
+========================================================================================================================
+
+1. ROW COUNT CHECK: ❌ FAIL
+   Excel Rows: 67
+   Snowflake Rows: 65
+   Match: False
+   Difference: -2
+
+2. COLUMN COUNT CHECK: ✅ PASS
+   Excel Columns: 11
+   Snowflake Columns: 11
+   Match: True
+   Difference: 0
+
+3. COLUMN MAPPING CHECK: ⚠️ WARN
+   Mapped Columns: 10
+   Missing in Snowflake: ['Bill Type Code']
+   Extra in Snowflake: ['BILL_TYPE']
+
+4. NULL VALUE CHECK:
+   Columns Checked: 10
+   Columns with NULL Mismatches: 10
+      - Claim Form Type: Excel=1, Snowflake=0, Diff=-1
+      - PMPM Prev Year: Excel=5, Snowflake=3, Diff=-2
+      - PMPM: Excel=8, Snowflake=6, Diff=-2
+      - PMPM YoY%: Excel=5, Snowflake=3, Diff=-2
+      - Total Paid Prev Year: Excel=5, Snowflake=3, Diff=-2
+      - Total Paid: Excel=8, Snowflake=6, Diff=-2
+      - Total Paid YoY%: Excel=2, Snowflake=0, Diff=-2
+      - Cost Per Claim Prev Year: Excel=5, Snowflake=3, Diff=-2
+      - Cost Per Claim: Excel=8, Snowflake=6, Diff=-2
+      - Cost Per Claim YoY%: Excel=5, Snowflake=3, Diff=-2
+
+5. DATA VALIDATION CHECK: ❌ FAIL
+   Sample Size: 10 rows
+   Mismatches Found: 18
+   First 10 mismatches:
+      - Row 0, Column 'PMPM Prev Year': Excel=193.67088284608036, Snowflake=0.1290446649382861
+      - Row 0, Column 'PMPM': Excel=193.93254760171138, Snowflake=0.12223076206197814
+      - Row 0, Column 'PMPM YoY%': Excel=0.0013510794797118504, Snowflake=-0.052802670141897094
+      - Row 0, Column 'Total Paid Prev Year': Excel=940127717.65, Snowflake=626415.71
+      - Row 0, Column 'Total Paid': Excel=834460529.1900002, Snowflake=525939.2899999999
+      - Row 0, Column 'Total Paid YoY%': Excel=-0.11239663130466133, Snowflake=-0.16039894657175832
+      - Row 0, Column 'Cost Per Claim Prev Year': Excel=1101.1706168528835, Snowflake=804.1279974326059
+      - Row 0, Column 'Cost Per Claim': Excel=1108.0032679874816, Snowflake=878.0288647746243
+      - Row 0, Column 'Cost Per Claim YoY%': Excel=0.006204897796969597, Snowflake=0.09190187081903219
+      - Row 1, Column 'PMPM Prev Year': Excel=86.41207085124287, Snowflake=193.67088284608036
+
+SUMMARY:
+   Total Checks: 6
+   Passed: 2
+   Warnings: 11
+   Failures: 20
+
+========================================================================================================================
+END OF REPORT
+========================================================================================================================

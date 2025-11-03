@@ -1,0 +1,4 @@
+Common Columns: 
+PowerBI Only: Cost Per Claim, Total Paid YoY%, Cost Per Claim YoY%, Total Paid Prev Year, PMPM Prev Year, Claim Form Type, PMPM YoY%, PMPM, Total Paid, Cost Per Claim Prev Year
+Snowflake Only: LAST_NAME, EMAIL, CREATED_AT, FIRST_NAME, PHONE, CUSTOMER_ID
+Match: False

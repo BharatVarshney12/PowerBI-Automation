@@ -11,7 +11,7 @@
 [32mINFO    [0m PowerBIAutomation:logger.py:142   - Column Count: 6
 [32mINFO    [0m PowerBIAutomation:logger.py:136 VERIFY: Table has rows | ✅ PASS
 [32mINFO    [0m PowerBIAutomation:logger.py:136 VERIFY: Table has columns | ✅ PASS
-[32mINFO    [0m PowerBIAutomation:logger.py:146 PERFORMANCE: Total Test | Duration: 7.35s
+[32mINFO    [0m PowerBIAutomation:logger.py:146 PERFORMANCE: Total Test | Duration: 11.91s
 [32mINFO    [0m PowerBIAutomation:logger.py:115 ================================================================================
 [32mINFO    [0m PowerBIAutomation:logger.py:116 TEST PASSED: Snowflake Connection Test
 [32mINFO    [0m PowerBIAutomation:logger.py:117 ================================================================================
