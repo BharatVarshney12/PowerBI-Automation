@@ -2,6 +2,26 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "RUN COMPLETE VALIDATION WORKFLOW",
+            "type": "shell",
+            "command": "C:/Users/bvarshney/AppData/Local/Programs/Python/Python312/python.exe",
+            "args": [
+                "${workspaceFolder}/run_complete_validation.py"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": false
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "showReuseMessage": false,
+                "clear": true,
+                "focus": true
+            },
+            "problemMatcher": []
+        },
+        {
             "label": "Create Sample Excel Data",
             "type": "shell",
             "command": "C:/Users/bvarshney/AppData/Local/Programs/Python/Python312/python.exe",
