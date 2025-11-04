@@ -121,19 +121,19 @@ def generate_snowflake_queries_excel():
                 print(f"{'='*100}")
                 
                 # Query 1: Full Data
-                print(f"\n1️⃣ Full Table Data:")
+                print(f"\n[1] Full Table Data:")
                 query_full = f"SELECT * FROM {table_name}"
                 df_full = run_query(cursor, query_full, f"All data from {table_name}", executed_queries)
                 df_full.to_excel(writer, sheet_name=f'{table_name}_Data', index=False)
                 
                 # Query 2: Row Count
-                print(f"\n2️⃣ Row Count:")
+                print(f"\n[2] Row Count:")
                 query_count = f"SELECT COUNT(*) as ROW_COUNT FROM {table_name}"
                 df_count = run_query(cursor, query_count, f"Row count for {table_name}", executed_queries)
                 df_count.to_excel(writer, sheet_name=f'{table_name}_RowCount', index=False)
                 
                 # Query 3: Column Information
-                print(f"\n3️⃣ Column Information:")
+                print(f"\n[3] Column Information:")
                 query_columns = f"""
                 SELECT 
                     ORDINAL_POSITION,
@@ -152,7 +152,7 @@ def generate_snowflake_queries_excel():
                 df_columns.to_excel(writer, sheet_name=f'{table_name}_Columns', index=False)
                 
                 # Query 4: NULL Counts per Column
-                print(f"\n4️⃣ NULL Value Counts:")
+                print(f"\n[4] NULL Value Counts:")
                 
                 # Get column names
                 cursor.execute(f"SELECT * FROM {table_name} LIMIT 1")
@@ -183,7 +183,7 @@ def generate_snowflake_queries_excel():
                 df_nulls.to_excel(writer, sheet_name=f'{table_name}_NULLs', index=False)
                 
                 # Query 5: Data Summary Statistics (for numeric columns)
-                print(f"\n5️⃣ Data Summary Statistics:")
+                print(f"\n[5] Data Summary Statistics:")
                 
                 numeric_stats = []
                 for col in columns:
@@ -227,7 +227,7 @@ def generate_snowflake_queries_excel():
                     df_stats.to_excel(writer, sheet_name=f'{table_name}_Stats', index=False)
                 
                 # Query 6: Distinct Values Count
-                print(f"\n6️⃣ Distinct Values Count:")
+                print(f"\n[6] Distinct Values Count:")
                 
                 distinct_counts = []
                 for col in columns:
@@ -254,7 +254,7 @@ def generate_snowflake_queries_excel():
                 df_distinct.to_excel(writer, sheet_name=f'{table_name}_Distinct', index=False)
                 
                 # Query 7: Sample Data (First 10 rows)
-                print(f"\n7️⃣ Sample Data (First 10 rows):")
+                print(f"\n[7] Sample Data (First 10 rows):")
                 query_sample = f"SELECT * FROM {table_name} LIMIT 10"
                 df_sample = run_query(cursor, query_sample, f"Sample data from {table_name}", executed_queries)
                 df_sample.to_excel(writer, sheet_name=f'{table_name}_Sample', index=False)
