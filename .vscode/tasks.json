@@ -1,0 +1,316 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Create Sample Excel Data",
+            "type": "shell",
+            "command": "C:/Users/bvarshney/AppData/Local/Programs/Python/Python312/python.exe",
+            "args": [
+                "${workspaceFolder}/utils/create_sample_data.py"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Run PowerBI Tests",
+            "type": "shell",
+            "command": "C:/Users/bvarshney/AppData/Local/Programs/Python/Python312/python.exe",
+            "args": [
+                "-m",
+                "pytest",
+                "tests/test_powerbi_automation.py",
+                "-v",
+                "-s"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Run Snowflake Tests",
+            "type": "shell",
+            "command": "C:/Users/bvarshney/AppData/Local/Programs/Python/Python312/python.exe",
+            "args": [
+                "-m",
+                "pytest",
+                "tests/test_snowflake_validation.py",
+                "-v",
+                "-s"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": false
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Run All Tests",
+            "type": "shell",
+            "command": "C:/Users/bvarshney/AppData/Local/Programs/Python/Python312/python.exe",
+            "args": [
+                "-m",
+                "pytest",
+                "tests/",
+                "-v",
+                "-s"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": false
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Validate Excel vs Snowflake",
+            "type": "shell",
+            "command": "C:/Users/bvarshney/AppData/Local/Programs/Python/Python312/python.exe",
+            "args": [
+                "${workspaceFolder}/validate_snowflake_excel.py"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": false
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "View Latest Log",
+            "type": "shell",
+            "command": "Get-Content",
+            "args": [
+                "(Get-ChildItem",
+                "${workspaceFolder}/logs/*.log",
+                "|",
+                "Sort-Object",
+                "LastWriteTime",
+                "|",
+                "Select-Object",
+                "-Last",
+                "1).FullName",
+                "-Tail",
+                "100"
+            ],
+            "group": "none",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Generate Allure Report",
+            "type": "shell",
+            "command": "allure",
+            "args": [
+                "serve",
+                "${workspaceFolder}/reports/allure-results"
+            ],
+            "group": "none",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Import CSV to Snowflake",
+            "type": "shell",
+            "command": "C:/Users/bvarshney/AppData/Local/Programs/Python/Python312/python.exe",
+            "args": [
+                "${workspaceFolder}/import_csv_to_snowflake.py"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Import Product Type CSV to Snowflake",
+            "type": "shell",
+            "command": "C:/Users/bvarshney/AppData/Local/Programs/Python/Python312/python.exe",
+            "args": [
+                "${workspaceFolder}/import_product_type_csv_to_snowflake.py"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Import Bill Type CSV to Snowflake",
+            "type": "shell",
+            "command": "C:/Users/bvarshney/AppData/Local/Programs/Python/Python312/python.exe",
+            "args": [
+                "${workspaceFolder}/import_bill_type_csv_to_snowflake.py"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Import Complete Excel to Snowflake",
+            "type": "shell",
+            "command": "C:/Users/bvarshney/AppData/Local/Programs/Python/Python312/python.exe",
+            "args": [
+                "${workspaceFolder}/import_complete_excel_to_snowflake.py"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Compare Excel vs Snowflake Reports",
+            "type": "shell",
+            "command": "C:/Users/bvarshney/AppData/Local/Programs/Python/Python312/python.exe",
+            "args": [
+                "${workspaceFolder}/compare_excel_snowflake_reports.py"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": false
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Quick Validation Check",
+            "type": "shell",
+            "command": "C:/Users/bvarshney/AppData/Local/Programs/Python/Python312/python.exe",
+            "args": [
+                "${workspaceFolder}/quick_validation.py"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": false
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Export Snowflake Queries to Excel",
+            "type": "shell",
+            "command": "C:/Users/bvarshney/AppData/Local/Programs/Python/Python312/python.exe",
+            "args": [
+                "${workspaceFolder}/snowflake_queries_to_excel.py"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Detect CSV vs Excel Mismatches",
+            "type": "shell",
+            "command": "C:/Users/bvarshney/AppData/Local/Programs/Python/Python312/python.exe",
+            "args": [
+                "${workspaceFolder}/detect_csv_excel_mismatches.py"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": false
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Complete Data Comparison (Snowflake vs Excel)",
+            "type": "shell",
+            "command": "C:/Users/bvarshney/AppData/Local/Programs/Python/Python312/python.exe",
+            "args": [
+                "${workspaceFolder}/complete_data_comparison.py"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "problemMatcher": []
+        }
+    ]
+}
