@@ -12,12 +12,12 @@ def check_bill_type_table():
     with SnowflakeConnector() as sf_conn:
         
         # Switch to PowerBI_learning database
-        sf_conn.cursor.execute("USE WAREHOUSE PowerBI")
-        sf_conn.cursor.execute("USE DATABASE PowerBI_learning")
-        sf_conn.cursor.execute("USE SCHEMA PUBLIC")
+        sf_conn.cursor.execute("USE WAREHOUSE POWERBI")
+        sf_conn.cursor.execute("USE DATABASE POWERBI_LEARNING")
+        sf_conn.cursor.execute("USE SCHEMA TRAINING_POWERBI")
         
-        print(f"\n[SNOWFLAKE] Using database: PowerBI_learning")
-        print(f"[SNOWFLAKE] Using schema: PUBLIC")
+        print(f"\n[SNOWFLAKE] Using database: POWERBI_LEARNING")
+        print(f"[SNOWFLAKE] Using schema: TRAINING_POWERBI")
         
         # Check row count
         count_query = "SELECT COUNT(*) as ROW_COUNT FROM SPEND_BY_BILL_TYPE"
