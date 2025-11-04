@@ -54,29 +54,17 @@ def check_snowflake_structure():
             except Exception as e:
                 pass
         
-        # List all tables in TRAINING_PowerBI schema (if it exists)
-        print("\n[5] Checking tables in TRAINING_PowerBI schema...")
+        # List all tables in TRAINING_PowerBI schema
+        print("\n[5] Checking tables in TRAINING_POWERBI schema...")
         try:
-            sf_conn.cursor.execute("USE SCHEMA TRAINING_PowerBI")
-            sf_conn.cursor.execute("SHOW TABLES IN SCHEMA TRAINING_PowerBI")
+            sf_conn.cursor.execute("USE SCHEMA TRAINING_POWERBI")
+            sf_conn.cursor.execute("SHOW TABLES IN SCHEMA TRAINING_POWERBI")
             tables = sf_conn.cursor.fetchall()
-            print(f"\nTables in TRAINING_PowerBI: {len(tables)}")
+            print(f"\nTables in TRAINING_POWERBI: {len(tables)}")
             for table in tables:
                 print(f"  - {table[1]}")  # Table name is in column 1
         except Exception as e:
-            print(f"❌ Schema TRAINING_PowerBI not found or error: {e}")
-        
-        # List all tables in PUBLIC schema
-        print("\n[6] Checking tables in PUBLIC schema...")
-        try:
-            sf_conn.cursor.execute("USE SCHEMA PUBLIC")
-            sf_conn.cursor.execute("SHOW TABLES IN SCHEMA PUBLIC")
-            tables = sf_conn.cursor.fetchall()
-            print(f"\nTables in PUBLIC: {len(tables)}")
-            for table in tables:
-                print(f"  - {table[1]}")  # Table name is in column 1
-        except Exception as e:
-            print(f"❌ Schema PUBLIC not found or error: {e}")
+            print(f"❌ Schema TRAINING_POWERBI not found or error: {e}")
         
         print("\n" + "="*80)
         print("STRUCTURE CHECK COMPLETE")
