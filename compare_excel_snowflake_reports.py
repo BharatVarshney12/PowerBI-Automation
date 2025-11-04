@@ -139,7 +139,7 @@ def load_excel_data(excel_file):
 
 def load_snowflake_table(table_name):
     """Load data from Snowflake table"""
-    print(f"\n❄️  Loading Snowflake table: {table_name}")
+    print(f"\n[SNOWFLAKE] Loading Snowflake table: {table_name}")
     
     conn = connect_snowflake()
     cursor = conn.cursor()
@@ -277,7 +277,7 @@ def run_snowflake_validation_queries(table_name):
 
 def compare_dataframes(excel_df, snowflake_df, table_name):
     """Detailed comparison between Excel and Snowflake data"""
-    print(f"\n🔬 Comparing Excel vs Snowflake for {table_name}")
+    print(f"\n[COMPARE] Comparing Excel vs Snowflake for {table_name}")
     
     comparison = {
         'table_name': table_name,
@@ -361,7 +361,7 @@ def compare_dataframes(excel_df, snowflake_df, table_name):
     if missing_in_sf:
         print(f"       Missing in Snowflake: {missing_in_sf}")
     if extra_in_sf:
-        print(f"      ️ Extra in Snowflake: {extra_in_sf}")
+        print(f"       Extra in Snowflake: {extra_in_sf}")
     
     # 4. NULL value comparison
     null_comparison = {}
@@ -557,7 +557,7 @@ def generate_excel_report(all_comparisons, output_file):
 
 def generate_text_report(all_comparisons, output_file):
     """Generate detailed text report"""
-    print(f"\n📄 Generating text report: {output_file}")
+    print(f"\n[REPORT] Generating text report: {output_file}")
     
     with open(output_file, 'w', encoding='utf-8') as f:
         f.write("="*120 + "\n")
@@ -725,8 +725,8 @@ def main():
         print(f"{'='*120}")
         print(f"\n Reports saved in: {output_dir}/")
         print(f"    Excel Report: {excel_report.name}")
-        print(f"   📄 Text Report: {text_report.name}")
-        print(f"   ❄️  Snowflake Queries Report: {sf_validation_file.name}")
+        print(f"    Text Report: {text_report.name}")
+        print(f"    Snowflake Queries Report: {sf_validation_file.name}")
         print(f"\n")
 
 if __name__ == "__main__":

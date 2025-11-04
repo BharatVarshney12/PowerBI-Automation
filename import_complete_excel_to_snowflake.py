@@ -89,7 +89,7 @@ def import_excel_to_snowflake(excel_file, table_name, column_mapping):
     print(f"    Snowflake columns: {list(df.columns)}")
     
     # Connect to Snowflake
-    print(f"\n❄️  Connecting to Snowflake...")
+    print(f"\n[SNOWFLAKE] Connecting to Snowflake...")
     conn = snowflake.connector.connect(**SNOWFLAKE_CONFIG)
     cursor = conn.cursor()
     
