@@ -224,13 +224,21 @@ def run_snowflake_validation_queries(table_name):
         results['null_counts'] = null_counts
         print(f"    NULL counts calculated for all columns")
         
-        # 5. Sample data (first 5 rows)
-        query = f"SELECT * FROM {SNOWFLAKE_CONFIG['database']}.{SNOWFLAKE_CONFIG['schema']}.{table_name} LIMIT 5"
+        # 5. Sample data (first 20 rows to show more data)
+        query = f"SELECT * FROM {SNOWFLAKE_CONFIG['database']}.{SNOWFLAKE_CONFIG['schema']}.{table_name} LIMIT 20"
         cursor.execute(query)
         sample_data = cursor.fetchall()
         sample_columns = [col[0] for col in cursor.description]
         results['sample_data'] = pd.DataFrame(sample_data, columns=sample_columns)
-        print(f"    Sample data retrieved")
+        print(f"    Sample data retrieved (20 rows)")
+        
+        # 6. Full data preview (all rows for validation)
+        query = f"SELECT * FROM {SNOWFLAKE_CONFIG['database']}.{SNOWFLAKE_CONFIG['schema']}.{table_name}"
+        cursor.execute(query)
+        full_data = cursor.fetchall()
+        full_columns = [col[0] for col in cursor.description]
+        results['full_data'] = pd.DataFrame(full_data, columns=full_columns)
+        print(f"    Full data retrieved ({len(full_data)} rows)")
         
         # 6. Data type summary
         type_summary = {}
@@ -428,6 +436,15 @@ def compare_dataframes(excel_df, snowflake_df, table_name):
     }
     
     print(f"   {'' if not data_mismatches else ''} Data Validation: {len(data_mismatches)} mismatches in {sample_size} sample rows")
+    
+    # Show sample of actual data being compared
+    print(f"\n   SAMPLE DATA PREVIEW (first 5 rows):")
+    print(f"   Excel columns: {list(excel_df.columns[:5])}...")
+    print(f"   Snowflake columns: {list(snowflake_df.columns[:5])}...")
+    if len(excel_df) > 0 and len(snowflake_df) > 0:
+        print(f"\n   First row comparison:")
+        for excel_col, sf_col in list(column_mapping.items())[:3]:
+            print(f"      {excel_col}: Excel={excel_df.iloc[0][excel_col]}, Snowflake={snowflake_df.iloc[0][sf_col]}")
     
     # Overall status
     all_passed = (
@@ -695,6 +712,9 @@ def main():
                 
                 # Sample data
                 sf_val['sample_data'].to_excel(writer, sheet_name=f'{table_name}_Sample', index=False)
+                
+                # Full data (all rows from Snowflake)
+                sf_val['full_data'].to_excel(writer, sheet_name=f'{table_name}_FullData', index=False)
         
         print(f"\n{'='*120}")
         print(" VALIDATION COMPLETE")
