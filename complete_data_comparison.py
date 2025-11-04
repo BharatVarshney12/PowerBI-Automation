@@ -139,24 +139,34 @@ def compare_values(csv_val, excel_val, tolerance=0.01):
         return str(csv_clean).strip() != str(excel_clean).strip()
 
 def apply_color_coding(workbook, sheet_name, diff_cells):
-    """Apply color coding to cells with differences"""
-    # Colors
-    red_fill = PatternFill(start_color='FFCCCC', end_color='FFCCCC', fill_type='solid')
-    green_fill = PatternFill(start_color='CCFFCC', end_color='CCFFCC', fill_type='solid')
-    yellow_fill = PatternFill(start_color='FFFFCC', end_color='FFFFCC', fill_type='solid')
-    bold_font = Font(bold=True)
+    """Apply color coding to highlight differences with clear visual indicators"""
+    # Define colors
+    yellow_highlight = PatternFill(start_color='FFFF99', end_color='FFFF99', fill_type='solid')  # Bright yellow for differences
+    light_yellow = PatternFill(start_color='FFFFCC', end_color='FFFFCC', fill_type='solid')  # Light yellow for status
+    
+    # Define fonts
+    bold_red_font = Font(bold=True, color='CC0000')  # Bold red for status text
     
     ws = workbook[sheet_name]
     
     for cell_info in diff_cells:
         row = cell_info['row']
-        col = cell_info['col']
+        csv_col = cell_info['csv_col']
+        status_col = cell_info['status_col']
+        excel_col = cell_info['excel_col']
         
-        # Color CSV column (red - different from Excel)
-        ws.cell(row=row, column=col).fill = red_fill
+        # Highlight CSV value (yellow background)
+        csv_cell = ws.cell(row=row, column=csv_col)
+        csv_cell.fill = yellow_highlight
         
-        # Color Excel column (green - original value)
-        ws.cell(row=row, column=col + 1).fill = green_fill
+        # Highlight STATUS cell (light yellow background, bold red text)
+        status_cell = ws.cell(row=row, column=status_col)
+        status_cell.fill = light_yellow
+        status_cell.font = bold_red_font
+        
+        # Highlight Excel value (yellow background)
+        excel_cell = ws.cell(row=row, column=excel_col)
+        excel_cell.fill = yellow_highlight
 
 def create_comparison_report():
     """Create comprehensive comparison report with color coding"""
@@ -212,11 +222,11 @@ def create_comparison_report():
             
             max_rows = min(len(csv_df), len(excel_df))
             
-            # Create side-by-side comparison
+            # Create clear 3-column comparison: CSV | Status | Excel
             comparison_data = []
             
             for idx in range(max_rows):
-                row_data = {'Row': idx + 1}
+                row_data = {'Row_Number': idx + 1}
                 
                 for col_idx, col in enumerate(csv_df.columns):
                     csv_val = csv_df.iloc[idx][col] if col in csv_df.columns else None
@@ -224,27 +234,28 @@ def create_comparison_report():
                     
                     total_cells += 1
                     
-                    # Add CSV value
-                    row_data[f'CSV_{col}'] = csv_val
-                    
-                    # Add Excel value  
-                    row_data[f'Excel_{col}'] = excel_val
-                    
                     # Check if different (with 0.01 tolerance for decimal differences)
-                    if compare_values(csv_val, excel_val, tolerance=0.01):
+                    is_different = compare_values(csv_val, excel_val, tolerance=0.01)
+                    
+                    if is_different:
                         different_cells += 1
+                        status = '❌ DIFFERENT'
                         diff_cells.append({
                             'row': idx + 2,  # +2 because of header and 0-indexing
-                            'col': col_idx * 2 + 2,  # Alternating CSV/Excel columns
+                            'csv_col': col_idx * 3 + 2,  # CSV column position (Row + CSV cols)
+                            'status_col': col_idx * 3 + 3,  # Status column position
+                            'excel_col': col_idx * 3 + 4,  # Excel column position
                             'column_name': col,
                             'csv_value': csv_val,
                             'excel_value': excel_val
                         })
-                        
-                        # Add difference marker
-                        row_data[f'DIFF_{col}'] = 'DIFFERENT'
                     else:
-                        row_data[f'DIFF_{col}'] = 'SAME'
+                        status = '✓ Match'
+                    
+                    # Add values in clear 3-column format
+                    row_data[f'{col}_CSV'] = csv_val
+                    row_data[f'{col}_STATUS'] = status
+                    row_data[f'{col}_Excel'] = excel_val
                 
                 comparison_data.append(row_data)
             
@@ -295,37 +306,67 @@ def create_comparison_report():
             print(f"\n   Coloring {len(diff_cells)} differences in {sheet_name}")
             apply_color_coding(workbook, sheet_name, diff_cells)
     
-    # Add legend sheet
+    # Add legend sheet with clear explanation
     legend_data = pd.DataFrame([
-        {'Color': 'RED (Pink)', 'Meaning': 'CSV Value (Different from Excel)'},
-        {'Color': 'GREEN', 'Meaning': 'Excel Value (Original Power BI Report)'},
-        {'Color': 'No Color', 'Meaning': 'Values Match'}
+        {'Format': 'Column Header', 'Explanation': 'Each data column has 3 sub-columns: CSV | STATUS | Excel'},
+        {'Format': 'YELLOW Highlight', 'Explanation': 'Values are DIFFERENT between CSV and Excel'},
+        {'Format': '❌ DIFFERENT', 'Explanation': 'Status indicator showing mismatch'},
+        {'Format': '✓ Match', 'Explanation': 'Values are identical (no highlighting)'},
+        {'Format': '', 'Explanation': ''},
+        {'Format': 'How to Read', 'Explanation': 'Compare CSV value ← → Excel value side-by-side'},
+        {'Format': 'Yellow Row', 'Explanation': 'These values DO NOT match - review both values'},
+        {'Format': 'No Color', 'Explanation': 'These values MATCH perfectly'}
     ])
     
     ws = workbook.create_sheet('Legend')
-    for r_idx, row in enumerate(legend_data.values, 1):
-        for c_idx, value in enumerate(row, 1):
-            ws.cell(row=r_idx + 1, column=c_idx, value=value)
     
-    # Color the legend
-    ws.cell(row=2, column=1).fill = PatternFill(start_color='FFCCCC', end_color='FFCCCC', fill_type='solid')
-    ws.cell(row=3, column=1).fill = PatternFill(start_color='CCFFCC', end_color='CCFFCC', fill_type='solid')
+    # Write header
+    ws.cell(row=1, column=1, value='FORMAT').font = Font(bold=True)
+    ws.cell(row=1, column=2, value='EXPLANATION').font = Font(bold=True)
+    
+    # Write data
+    for r_idx, row in enumerate(legend_data.values, 2):
+        for c_idx, value in enumerate(row, 1):
+            ws.cell(row=r_idx, column=c_idx, value=value)
+    
+    # Apply color coding to legend examples
+    yellow_highlight = PatternFill(start_color='FFFF99', end_color='FFFF99', fill_type='solid')
+    light_yellow = PatternFill(start_color='FFFFCC', end_color='FFFFCC', fill_type='solid')
+    bold_red_font = Font(bold=True, color='CC0000')
+    
+    ws.cell(row=3, column=1).fill = yellow_highlight  # YELLOW Highlight example
+    ws.cell(row=4, column=1).fill = light_yellow  # Status cell example
+    ws.cell(row=4, column=1).font = bold_red_font
+    ws.cell(row=8, column=1).fill = yellow_highlight  # Yellow Row example
+    
+    # Adjust column widths
+    ws.column_dimensions['A'].width = 20
+    ws.column_dimensions['B'].width = 70
     
     workbook.save(output_file)
     
     print(f"\n{'='*100}")
-    print(f"REPORT GENERATED SUCCESSFULLY WITH COLOR CODING")
+    print(f"REPORT GENERATED SUCCESSFULLY WITH CLEAR COMPARISON FORMAT")
     print(f"{'='*100}")
     print(f"\nFile: {output_file}")
-    print(f"\nCOLOR CODING LEGEND:")
-    print(f"  RED (Pink) = CSV Value (Different from Excel)")
-    print(f"  GREEN = Excel Value (Original from Power BI Report)")
-    print(f"  No Color = Values Match")
-    print(f"\nThis report shows:")
-    print(f"  - Summary: Overview with match percentages")
-    print(f"  - {list(TABLES.keys())[0]}: Side-by-side CSV vs Excel comparison")
-    print(f"  - Legend: Color coding explanation")
-    print(f"\nDifferent values are HIGHLIGHTED so you can easily see what changed!\n")
+    print(f"\n📊 REPORT FORMAT:")
+    print(f"  Each column is split into 3 parts: CSV | STATUS | Excel")
+    print(f"\n🎨 COLOR CODING:")
+    print(f"  YELLOW HIGHLIGHT = Values are DIFFERENT (review both CSV and Excel values)")
+    print(f"  ❌ DIFFERENT = Status indicator showing mismatch")
+    print(f"  ✓ Match = Values are identical (no highlighting)")
+    print(f"  No Color = Perfect match between CSV and Excel")
+    print(f"\n💡 HOW TO USE:")
+    print(f"  1. Yellow rows show differences - compare CSV vs Excel values side-by-side")
+    print(f"  2. STATUS column clearly marks differences with ❌ DIFFERENT")
+    print(f"  3. No highlighting = values match perfectly")
+    print(f"  4. Check 'Legend' sheet for detailed explanation")
+    print(f"\n📝 SHEETS INCLUDED:")
+    print(f"  - Summary: Match percentages for all tables")
+    for table_name in TABLES.keys():
+        print(f"  - {table_name}: CSV ← → Excel comparison")
+    print(f"  - Legend: Color coding and format explanation")
+    print(f"\nDifferences are CLEARLY HIGHLIGHTED with yellow so you can instantly see mismatches!\n")
 
 if __name__ == "__main__":
     create_comparison_report()
