@@ -35,14 +35,14 @@ def clean_value(value):
         if '%' in value:
             value = value.replace('%', '')
         
-        # Try to convert to number
+        # Try to convert to number - always use float for consistency
         try:
-            if '.' in value:
-                return float(value)
-            else:
-                return int(value)
+            return float(value)
         except:
             return value
+    
+    if isinstance(value, (int, float)):
+        return float(value)  # Convert to float
     
     return value
 

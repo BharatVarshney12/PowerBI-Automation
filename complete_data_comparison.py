@@ -40,12 +40,12 @@ def clean_value(value):
         value = value.replace('$', '').replace(',', '').replace('%', '')
         
         try:
-            if '.' in value:
-                return float(value)
-            else:
-                return int(value)
+            return float(value)  # Always convert to float for consistency
         except:
             return value
+    
+    if isinstance(value, (int, float)):
+        return float(value)  # Convert to float
     
     return value
 
@@ -117,8 +117,8 @@ def get_excel_data(excel_file):
         print(f"   Error: {str(e)}")
         return None
 
-def compare_values(csv_val, excel_val):
-    """Compare two values and return if they're different"""
+def compare_values(csv_val, excel_val, tolerance=0.01):
+    """Compare two values with decimal tolerance"""
     # Handle None/NaN
     if pd.isna(csv_val) and pd.isna(excel_val):
         return False
@@ -131,11 +131,12 @@ def compare_values(csv_val, excel_val):
     
     # Compare
     if isinstance(csv_clean, (int, float)) and isinstance(excel_clean, (int, float)):
-        # Numeric comparison with tolerance
-        return abs(csv_clean - excel_clean) > 0.001
+        # Numeric comparison with tolerance (0.01 = ignore differences < 1 cent)
+        diff = abs(csv_clean - excel_clean)
+        return diff > tolerance
     else:
         # String comparison
-        return str(csv_clean) != str(excel_clean)
+        return str(csv_clean).strip() != str(excel_clean).strip()
 
 def apply_color_coding(workbook, sheet_name, diff_cells):
     """Apply color coding to cells with differences"""
@@ -216,8 +217,8 @@ def create_comparison_report():
                     # Add Excel value  
                     row_data[f'Excel_{col}'] = excel_val
                     
-                    # Check if different
-                    if compare_values(csv_val, excel_val):
+                    # Check if different (with 0.01 tolerance for decimal differences)
+                    if compare_values(csv_val, excel_val, tolerance=0.01):
                         different_cells += 1
                         diff_cells.append({
                             'row': idx + 2,  # +2 because of header and 0-indexing

@@ -97,9 +97,11 @@ def clean_value(value):
         # Remove percentage signs
         value = value.replace('%', '')
         try:
-            return float(value)
+            return float(value)  # Always use float for consistency
         except:
             return value
+    if isinstance(value, (int, float)):
+        return float(value)  # Convert to float
     return value
 
 def load_csv_data(csv_file, column_mapping):

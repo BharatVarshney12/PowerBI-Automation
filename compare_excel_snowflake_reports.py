@@ -409,15 +409,19 @@ def compare_dataframes(excel_df, snowflake_df, table_name):
             if pd.isna(excel_val) and pd.isna(sf_val):
                 continue
             
-            # Compare values
+            # Compare values with 0.01 tolerance (ignore differences < 1 cent)
             if isinstance(excel_val, (int, float)) and isinstance(sf_val, (int, float)):
-                if not np.isclose(excel_val, sf_val, rtol=1e-5, equal_nan=True):
+                excel_val_f = float(excel_val)
+                sf_val_f = float(sf_val)
+                
+                # Use absolute tolerance of 0.01 instead of relative tolerance
+                if abs(excel_val_f - sf_val_f) > 0.01:
                     data_mismatches.append({
                         'row': idx,
                         'column': excel_col,
-                        'excel_value': float(excel_val) if excel_val is not None else None,
-                        'snowflake_value': float(sf_val) if sf_val is not None else None,
-                        'difference': float(excel_val - sf_val) if excel_val is not None and sf_val is not None else None
+                        'excel_value': excel_val_f,
+                        'snowflake_value': sf_val_f,
+                        'difference': excel_val_f - sf_val_f
                     })
             else:
                 if str(excel_val) != str(sf_val):

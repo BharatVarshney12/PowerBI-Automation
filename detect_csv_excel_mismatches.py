@@ -33,17 +33,33 @@ def clean_value(value):
         return None
     
     if isinstance(value, str):
-        # Remove currency symbols, commas, percentage signs
-        value = value.replace('$', '').replace(',', '').replace('%', '').strip()
+        # Store original for debugging
+        original = value
         
-        # Try to convert to number
+        # Remove whitespace
+        value = value.strip()
+        
+        # Handle percentage values (e.g., "0.1%" -> 0.001)
+        if '%' in value:
+            value = value.replace('%', '').strip()
+            try:
+                return float(value) / 100.0  # Convert to decimal
+            except:
+                return value
+        
+        # Handle currency values (e.g., "$123.67" -> 123.67)
+        if '$' in value or ',' in value:
+            value = value.replace('$', '').replace(',', '').strip()
+        
+        # Try to convert to number - always use float for consistency
         try:
-            if '.' in value:
-                return float(value)
-            else:
-                return int(value)
+            return float(value)
         except (ValueError, AttributeError):
             return value
+    
+    # Already a number - convert to float
+    if isinstance(value, (int, float)):
+        return float(value)
     
     return value
 
@@ -113,11 +129,15 @@ def compare_values(val1, val2):
     if (val1 is None or pd.isna(val1)) or (val2 is None or pd.isna(val2)):
         return False
     
-    # Both numeric
+    # Both numeric - use absolute tolerance (0.01 = ignore differences < 1 cent)
     if isinstance(val1, (int, float)) and isinstance(val2, (int, float)):
-        return abs(float(val1) - float(val2)) < 0.0001
+        val1_f = float(val1)
+        val2_f = float(val2)
+        
+        # Use absolute tolerance
+        return abs(val1_f - val2_f) < 0.01
     
-    # String comparison
+    # String comparison (case-insensitive)
     return str(val1).strip().lower() == str(val2).strip().lower()
 
 def detect_mismatches():
