@@ -57,7 +57,9 @@ class ValidationWorkflow:
                 [self.python_exe, script_name],
                 capture_output=True,
                 text=True,
-                timeout=300  # 5 minute timeout
+                timeout=300,  # 5 minute timeout
+                encoding='utf-8',  # Fix Unicode encoding issue
+                errors='replace'  # Replace unencoded characters
             )
             
             # Print script output
