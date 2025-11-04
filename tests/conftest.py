@@ -14,53 +14,53 @@ import allure
 
 @pytest.fixture(scope="function")
 def browser_page():
-    """Fixture to provide browser page with session persistence"""
-    manager = BrowserManager()
-    manager.launch_browser()
-    page = manager.create_context()
-    
-    yield page
-    
-    # Save session after test completes (if login was successful)
-    manager.save_session()
-    manager.close()
+ """Fixture to provide browser page with session persistence"""
+ manager = BrowserManager()
+ manager.launch_browser()
+ page = manager.create_context()
+ 
+ yield page
+ 
+ # Save session after test completes (if login was successful)
+ manager.save_session()
+ manager.close()
 
 
 @pytest.fixture(scope="function")
 def login_page(browser_page):
-    """Fixture to provide LoginPage instance"""
-    return LoginPage(browser_page)
+ """Fixture to provide LoginPage instance"""
+ return LoginPage(browser_page)
 
 
 @pytest.fixture(scope="function")
 def dashboard_page(browser_page):
-    """Fixture to provide DashboardPage instance"""
-    return DashboardPage(browser_page)
+ """Fixture to provide DashboardPage instance"""
+ return DashboardPage(browser_page)
 
 
 @pytest.fixture(scope="function")
 def export_page(browser_page):
-    """Fixture to provide ExportPage instance"""
-    return ExportPage(browser_page)
+ """Fixture to provide ExportPage instance"""
+ return ExportPage(browser_page)
 
 
 @pytest.fixture(scope="function")
 def credentials():
-    """Fixture to provide login credentials"""
-    return {
-        'username': POWERBI_CONFIG['username'],
-        'password': POWERBI_CONFIG['password']
-    }
+ """Fixture to provide login credentials"""
+ return {
+ 'username': POWERBI_CONFIG['username'],
+ 'password': POWERBI_CONFIG['password']
+ }
 
 
 @pytest.fixture(scope="function")
 def powerbi_url():
-    """Fixture to provide PowerBI URL"""
-    return POWERBI_CONFIG['url']
+ """Fixture to provide PowerBI URL"""
+ return POWERBI_CONFIG['url']
 
 
 @pytest.fixture(autouse=True)
 def setup_allure_environment():
-    """Setup Allure environment info"""
-    # Allure environment is set via allure-results/environment.properties
-    pass
+ """Setup Allure environment info"""
+ # Allure environment is set via allure-results/environment.properties
+ pass
