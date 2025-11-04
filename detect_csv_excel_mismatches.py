@@ -296,6 +296,19 @@ def detect_mismatches():
     output_dir = Path('validation_reports')
     output_dir.mkdir(exist_ok=True)
     
+    # Clean up old mismatch files
+    print("\n[CLEANUP] Removing old mismatch reports...")
+    old_files = list(output_dir.glob('Data_Mismatches_*.xlsx'))
+    for old_file in old_files:
+        try:
+            old_file.unlink()
+            print(f"   Deleted: {old_file.name}")
+        except Exception as e:
+            print(f"   Warning: Could not delete {old_file.name}: {e}")
+    
+    if old_files:
+        print(f"   Cleaned up {len(old_files)} old mismatch report(s)")
+    
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
     output_file = output_dir / f'Data_Mismatches_{timestamp}.xlsx'
     

@@ -169,6 +169,19 @@ def create_comparison_report():
     output_dir = Path('validation_reports')
     output_dir.mkdir(exist_ok=True)
     
+    # Clean up old CSV comparison files
+    print("\n[CLEANUP] Removing old CSV comparison reports...")
+    old_files = list(output_dir.glob('CSV_vs_Excel_Comparison_ColorCoded_*.xlsx'))
+    for old_file in old_files:
+        try:
+            old_file.unlink()
+            print(f"   Deleted: {old_file.name}")
+        except Exception as e:
+            print(f"   Warning: Could not delete {old_file.name}: {e}")
+    
+    if old_files:
+        print(f"   Cleaned up {len(old_files)} old comparison(s)")
+    
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
     output_file = output_dir / f'CSV_vs_Excel_Comparison_ColorCoded_{timestamp}.xlsx'
     

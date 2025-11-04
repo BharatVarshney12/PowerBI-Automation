@@ -683,6 +683,30 @@ def main():
         output_dir = Path('validation_reports')
         output_dir.mkdir(exist_ok=True)
         
+        # Clean up old validation reports before creating new ones
+        print("\n[CLEANUP] Removing old validation reports...")
+        old_files = []
+        patterns = [
+            'Excel_vs_Snowflake_Validation_*.xlsx',
+            'Validation_Report_*.txt',
+            'Snowflake_Validation_Queries_*.xlsx'
+        ]
+        
+        for pattern in patterns:
+            old_files.extend(output_dir.glob(pattern))
+        
+        for old_file in old_files:
+            try:
+                old_file.unlink()
+                print(f"   Deleted: {old_file.name}")
+            except Exception as e:
+                print(f"   Warning: Could not delete {old_file.name}: {e}")
+        
+        if old_files:
+            print(f"   Cleaned up {len(old_files)} old report(s)")
+        else:
+            print("   No old reports to clean up")
+        
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
         
         # Excel report

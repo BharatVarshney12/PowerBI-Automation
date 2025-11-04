@@ -57,6 +57,19 @@ def generate_snowflake_queries_excel():
     output_dir = Path('validation_reports')
     output_dir.mkdir(exist_ok=True)
     
+    # Clean up old SQL results files
+    print("\n[CLEANUP] Removing old SQL results...")
+    old_files = list(output_dir.glob('Snowflake_SQL_Results_*.xlsx'))
+    for old_file in old_files:
+        try:
+            old_file.unlink()
+            print(f"   Deleted: {old_file.name}")
+        except Exception as e:
+            print(f"   Warning: Could not delete {old_file.name}: {e}")
+    
+    if old_files:
+        print(f"   Cleaned up {len(old_files)} old SQL result(s)")
+    
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
     excel_file = output_dir / f'Snowflake_SQL_Results_{timestamp}.xlsx'
     
