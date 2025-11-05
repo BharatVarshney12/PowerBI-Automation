@@ -22,6 +22,11 @@ data/downloads/*.xlsx
 data/downloads/*.csv
 data/auth_state.json
 
+# Validation Reports (Generated Output)
+validation_reports/
+*.xlsx
+!data/downloads/.gitkeep
+
 # IDE
 .vscode/
 .idea/
