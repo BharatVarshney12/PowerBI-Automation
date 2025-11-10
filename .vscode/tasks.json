@@ -331,6 +331,113 @@
                 "clear": true
             },
             "problemMatcher": []
+        },
+        {
+            "label": "DataComPy: Run All Comparisons",
+            "type": "shell",
+            "command": "C:/Users/bvarshney/AppData/Local/Programs/Python/Python312/python.exe",
+            "args": [
+                "${workspaceFolder}/datacompy_validation/run_comparison.py",
+                "--all"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "showReuseMessage": false,
+                "clear": true,
+                "focus": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "DataComPy: Compare SPEND_BY_CODE",
+            "type": "shell",
+            "command": "C:/Users/bvarshney/AppData/Local/Programs/Python/Python312/python.exe",
+            "args": [
+                "${workspaceFolder}/datacompy_validation/run_comparison.py",
+                "--table",
+                "SPEND_BY_CODE"
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "DataComPy: Compare SPEND_BY_PRODUCT_TYPE",
+            "type": "shell",
+            "command": "C:/Users/bvarshney/AppData/Local/Programs/Python/Python312/python.exe",
+            "args": [
+                "${workspaceFolder}/datacompy_validation/run_comparison.py",
+                "--table",
+                "SPEND_BY_PRODUCT_TYPE"
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "DataComPy: Compare SPEND_BY_BILL_TYPE",
+            "type": "shell",
+            "command": "C:/Users/bvarshney/AppData/Local/Programs/Python/Python312/python.exe",
+            "args": [
+                "${workspaceFolder}/datacompy_validation/run_comparison.py",
+                "--table",
+                "SPEND_BY_BILL_TYPE"
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "DataComPy: Run Basic Demo",
+            "type": "shell",
+            "command": "C:/Users/bvarshney/AppData/Local/Programs/Python/Python312/python.exe",
+            "args": [
+                "${workspaceFolder}/datacompy_validation/demo_basic_usage.py"
+            ],
+            "group": "none",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "DataComPy: Run Excel vs CSV Demo",
+            "type": "shell",
+            "command": "C:/Users/bvarshney/AppData/Local/Programs/Python/Python312/python.exe",
+            "args": [
+                "${workspaceFolder}/datacompy_validation/demo_excel_csv.py"
+            ],
+            "group": "none",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "problemMatcher": []
         }
     ]
 }

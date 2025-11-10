@@ -8,3 +8,4 @@ xlsxwriter
 sweetviz
 ydata-profiling
 snowflake-connector-python
+datacompy
